@@ -1,11 +1,13 @@
 import React, {useEffect} from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 
 import ProductComponent from './ProductComponent';
+import { setProducts } from './../redux/actions/productActions';
 
 const ProductListing = () => {
     const products = useSelector((state) => state);
+    const dispatch = useDispatch();
 
     const fetchProducts = async () => {
      const response = await axios
@@ -13,13 +15,14 @@ const ProductListing = () => {
      .catch((err) => {
          console.log("Error", err);
      });
-     console.log(response);
+     dispatch(setProducts(response.data));
     }
     
     useEffect(() =>{
      fetchProducts();
     }, [])
-
+    
+ console.log("Produts:", products);
     return (
         <div className="ui grid container">
           <ProductComponent />
